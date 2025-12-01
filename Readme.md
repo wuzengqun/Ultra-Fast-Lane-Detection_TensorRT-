@@ -1,7 +1,7 @@
 # Ultra-Fast-Lane-Detection_TensorRT-加速
 ---
 本仓库存储了Ultra-Fast-Lane-Detection算法TensorRT加速的示例代码。
-由于模型较大，无法放在仓库中，完整代码自取：
+由于模型较大，无法放在仓库中，完整代码自取：sha256:ab7f2f8c629d9db9d31402ff44fa4993519343f4835f7684752a77cc9ba3719d
 
 
 演示视频:  
@@ -38,6 +38,7 @@ This project is based on
  ● https://github.com/cqu20160901/Ultra-Fast-Lane-Detection_caffe_onnx_horizon_rknn  
  ● https://github.com/cfzd/Ultra-Fast-Lane-Detection  
 Thanks to the original authors for their work!  
+
 
 
 
