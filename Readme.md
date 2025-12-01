@@ -13,6 +13,8 @@
 
 文件说明:
 ---
+pt2onnx.py：将pt转onnx
+
 onnx2trt.py：将onnx转tensorrt（tensorrt8.6.1）
 
 tensorRT_inferenc_demo.py：tensorRT模型图片推理demo
@@ -24,4 +26,16 @@ tensorRT_inferenc_video.py：tensorRT模型视频推理demo（以图片文件夹
 ---
 1、下载Ultra-Fast-Lane-Detection官方源码：https://github.com/cfzd/Ultra-Fast-Lane-Detection
 2、下载CULane数据集训练得到的Ultra-Fast-Lane-Detection模型，官方地址有提供
-3、
+3、将pt2onnx.py放到此文件夹中：
+```bash
+python onnx2trt.py
+```
+4、将转换得到的onnx文件放到本仓库代码文件夹中即可
+
+Acknowledgements
+---
+This project is based on  
+ ● https://github.com/cqu20160901/Ultra-Fast-Lane-Detection_caffe_onnx_horizon_rknn
+ ● https://github.com/cfzd/Ultra-Fast-Lane-Detection
+Thanks to the original authors for their work!  
+
