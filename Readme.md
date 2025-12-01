@@ -19,7 +19,7 @@ onnx2trt.py：将onnx转tensorrt（tensorrt8.6.1）
 
 tensorRT_inferenc_demo.py：tensorRT模型图片推理demo  
 
-tensorRT_inferenc_video.py：tensorRT模型视频推理demo（以图片文件夹形式，下载地址: https://drive.google.com/drive/folders/1mSLgwVTiaUMAb4AVOWwlCD5JcWdrwpvu，选择video_example.zip）  
+tensorRT_inferenc_video.py：tensorRT模型视频推理demo（以图片文件夹形式，下载地址: https://drive.google.com/drive/folders/1mSLgwVTiaUMAb4AVOWwlCD5JcWdrwpvu ，选择video_example.zip）  
 
 
 导出onnx:  
@@ -35,8 +35,9 @@ python onnx2trt.py
 Acknowledgements  
 ---
 This project is based on  
- ● https://github.com/cqu20160901/Ultra-Fast-Lane-Detection_caffe_onnx_horizon_rknn
+ ● https://github.com/cqu20160901/Ultra-Fast-Lane-Detection_caffe_onnx_horizon_rknn  
  ● https://github.com/cfzd/Ultra-Fast-Lane-Detection
 Thanks to the original authors for their work!  
+
 
 
