@@ -5,6 +5,7 @@ import tensorrt as trt
 import pycuda.driver as cuda
 import pycuda.autoinit
 from math import exp
+from scipy.interpolate import CubicSpline
 
 TRT_LOGGER = trt.Logger(trt.Logger.VERBOSE)
 
@@ -57,13 +58,22 @@ def postprocess(output):
                 if maxvalue < output[k, j, i]:
                     maxvalue = output[k, j, i]
                     maxindex = k
+                if k == 199:
+                    if maxvalue < output[k + 1, j, i]:
+                        maxvalue = output[k + 1, j, i]
+                        maxindex = k
+
                 tmp = exp(output[k, j, i])
                 total += tmp
+
             for k in range(200):
-                tmp = exp(output[k, j, i]) / total
-                output[k, j, i] = tmp
-                result[17 - j, i] += tmp * (k + 1)
+                if maxindex < 199:
+                    tmp = exp(output[k, j, i]) / total
+                    output[k, j, i] = tmp
+                    result[17 - j, i] += tmp * (k + 1)
+
     return result
+
 
 def do_inference(context, bindings, inputs, outputs, stream):
     cuda.memcpy_htod_async(inputs[0].device, inputs[0].host, stream)
@@ -109,12 +119,36 @@ def main():
         result = postprocess(trt_out[0])
 
         # 绘制车道线
-        for i in range(result.shape[1]):
+        colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
+        for i in range(result.shape[1]):  # 4 条车道线
+            lane_points = []
+
             for k in range(result.shape[0]):
                 if result[k, i] > 0:
-                    point = (int(result[k, i] * sample_w * img_w / input_w) - 1, int(img_h - k * 20) - 1)
-                    colors = [(255,0,0),(0,255,0),(0,0,255),(0,255,255)]
-                    cv2.circle(frame, point, 5, colors[i], -1)
+                    x = int(result[k, i] * sample_w * img_w / input_w)
+                    y = int(img_h - k * 20)
+                    lane_points.append((x, y))
+
+                    # （可选）原始点
+                    # cv2.circle(frame, (x, y), 5, colors[i], -1)
+
+            # 至少需要 4 个点才能拟合三次样条
+            if len(lane_points) < 4:
+                continue
+            lane_points.sort(key=lambda p: p[1])
+
+            xs = np.array([p[0] for p in lane_points])
+            ys = np.array([p[1] for p in lane_points])
+
+            spline = CubicSpline(ys, xs)
+            y_min, y_max = ys.min(), ys.max()
+            y_dense = np.linspace(y_min, y_max, 120)  # 120个点，非常平滑
+            x_dense = spline(y_dense)
+
+            curve_points = np.array([(int(x), int(y)) for x, y in zip(x_dense, y_dense)], dtype=np.int32)
+
+            cv2.polylines(frame, [curve_points], isClosed=False, color=colors[i], thickness=3)
+
 
         # 写入视频
         # out.write(frame)
